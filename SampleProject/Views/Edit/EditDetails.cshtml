@@ -1,0 +1,203 @@
+﻿@{ Layout = null; }
+@model SampleProject.Models.Employee
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Details</title>
+
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        .topbar {
+            height: 64px;
+            background: #161b22;
+            border-bottom: 1px solid #21262d;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* ===== CONTENT ===== */
+        .dashboard {
+            padding: 40px 60px;
+            max-width: 600px;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+            .form-group label {
+                display: block;
+                font-size: 13px;
+                margin-bottom: 8px;
+                color: #8b949e;
+                font-weight: 500;
+            }
+
+        .form-input {
+            width: 100%;
+            padding: 13px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: white;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all .2s ease;
+        }
+
+            .form-input:focus {
+                outline: none;
+                border-color: #58a6ff;
+                box-shadow: 0 0 0 2px rgba(88,166,255,.15);
+            }
+
+        /* ===== BUTTONS ===== */
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .save-btn {
+            background: #238636;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+            .save-btn:hover {
+                background: #2ea043;
+            }
+
+        .cancel-btn {
+            background: #21262d;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+            .cancel-btn:hover {
+                background: #30363d;
+            }
+    </style>
+</head>
+
+<body>
+
+  
+    <div class="topbar">
+        Edit Details
+    </div>
+
+  
+    <div class="dashboard">
+
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text"
+                   id="name"
+                   class="form-input"
+                   value="@Model.UserName" />
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email"
+                   id="email"
+                   class="form-input"
+                   value="@Model.Email" />
+        </div>
+
+        <div class="form-group">
+            <label>New Password</label>
+            <input type="password"
+                   id="password"
+                   class="form-input"
+                   placeholder="Leave empty to keep current password" />
+        </div>
+
+        <div class="actions">
+            <button type="button" class="save-btn" id="saveProfile">
+                Save Changes
+            </button>
+
+            <button type="button" class="cancel-btn"
+                    onclick="window.history.back()">
+                Cancel
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        $("#saveProfile").click(function () {
+
+            var name = $("#name").val().trim();
+            var email = $("#email").val().trim();
+            var password = $("#password").val();
+
+            if (!name || !email) {
+                alert("Name and Email required.");
+                return;
+            }
+
+            $.ajax({
+                url: "/Edit/UpdateDetails",
+                type: "POST",
+                data: {
+                    UserName: name,
+                    Email: email,
+                    Password: password
+                },
+                success: function (res) {
+                    if (res.success) {
+
+                        alert("Details updated successfully. Please login again.");
+
+                        
+                        window.location.href = "/Account/Login";
+                    } else {
+                        alert("Update failed");
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

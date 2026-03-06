@@ -1,0 +1,268 @@
+﻿@{ Layout = null;
+    var managers = ViewBag.Managers as List<SampleProject.Models.Employee>;
+    var clients = ViewBag.Clients as List<SampleProject.Models.ClientModel>;
+    var projects = ViewBag.Projects as List<SampleProject.Models.ProjectModel>;
+    var activities = ViewBag.ActivityTypes as List<SampleProject.Models.ActivityType>;
+    var departments = ViewBag.Departments as List<SampleProject.Models.DepartmentModel>;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="~/Content/Admin/admin.css" rel="stylesheet" />
+</head>
+<body>
+
+
+
+    <div class="main">
+
+
+        <div class="header">
+            <h2>Admin Dashboard</h2>
+            <span class="header-badge">Administrator</span>
+
+        </div>
+        <div class="fix-sidebar">
+            <div class="sidebar">
+                <div>
+                    <div class="sidebar-brand">Admin Panel</div>
+
+                    <div class="nav-item active" onclick="showTab('managers', this)">
+                        <span class="nav-icon"></span> Managers
+                    </div>
+                    <div class="nav-item" onclick="showTab('clients', this)">
+                        <span class="nav-icon"></span> Clients
+                    </div>
+                    <div class="nav-item" onclick="showTab('projects', this)">
+                        <span class="nav-icon"></span> Projects
+                    </div>
+                    <div class="nav-item" onclick="showTab('activities', this)">
+                        <span class="nav-icon"></span> Activity Types
+                    </div>
+                </div>
+
+                <div class="sidebar-footer">
+                    <button class="editdetails" onclick="window.location='@Url.Action("EditDetails","Edit")'">Edit Details</button>
+                    <button class="logout-btn"
+                            onclick="window.location='@Url.Action("Logout","Account")'">
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="content">
+
+                <!-- MANAGERS -->
+                <div id="tab-managers" class="tab-panel active">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title">Managers</div>
+                            <div class="panel-count">@managers.Count managers</div>
+                        </div>
+                        <button class="add-btn" onclick="toggleForm('managerForm')">+ Add Manager</button>
+                    </div>
+
+                    <div id="managerForm" class="add-form">
+                        <form method="post" action="@Url.Action("AddManager","Admin")">
+                            <div class="form-row">
+                                <input name="name" class="form-input" placeholder="Full name" required />
+                                <input name="email" class="form-input" placeholder="Email address" required />
+                                <select name="departmentId" class="form-input" required>
+                                    <option value="">Select Department</option>
+
+                                    @foreach (var d in departments)
+                                    {
+                                        <option value="@d.DepartmentId">
+                                            @d.DepartmentName
+                                        </option>
+                                    }
+                                </select>
+                                <input name="password" type="password" class="form-input" placeholder="Password" required />
+                            </div>
+                            <button class="save-btn" type="submit">Save Manager</button>
+                        </form>
+                    </div>
+
+                    <div class="card-grid">
+                        @if (managers.Count == 0)
+                        {
+                            <div class="empty-state">No managers added yet.</div>
+                        }
+                        @foreach (var m in managers)
+                        {
+                            <div class="card">
+                                <form method="post" action="@Url.Action("DeleteManager","Admin")">
+                                    <input type="hidden" name="id" value="@m.UserId" />
+                                    <button class="delete-btn" type="submit" title="Delete">✕</button>
+                                </form>
+                                <div class="card-name">@m.UserName</div>
+                                <div class="card-sub">@m.Email</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- CLIENTS -->
+                <div id="tab-clients" class="tab-panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title">Clients</div>
+                            <div class="panel-count">@clients.Count clients</div>
+                        </div>
+                        <button class="add-btn" onclick="toggleForm('clientForm')">+ Add Client</button>
+                    </div>
+
+                    <div id="clientForm" class="add-form">
+                        <form method="post" action="@Url.Action("AddClient","Admin")">
+                            <div class="form-row">
+                                <input name="name" class="form-input" placeholder="Client name" required />
+                                <input name="email" class="form-input" placeholder="Email address" required />
+                            </div>
+                            <button class="save-btn" type="submit">Save Client</button>
+                        </form>
+                    </div>
+
+                    <div class="card-grid">
+                        @if (clients.Count == 0)
+                        {
+                            <div class="empty-state">No clients added yet.</div>
+                        }
+                        @foreach (var c in clients)
+                        {
+                            <div class="card">
+                                <form method="post" action="@Url.Action("DeleteClient","Admin")">
+                                    <input type="hidden" name="id" value="@c.ClientId" />
+                                    <button class="delete-btn" type="submit" title="Delete">✕</button>
+                                </form>
+                                <div class="card-name">@c.ClientName</div>
+                                <div class="card-sub">@c.ClientEmail</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- PROJECTS -->
+                <div id="tab-projects" class="tab-panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title">Projects</div>
+                            <div class="panel-count">@projects.Count project</div>
+                        </div>
+                        <button class="add-btn" onclick="toggleForm('projectForm')">+ Add Project</button>
+                    </div>
+
+                    <div id="projectForm" class="add-form">
+                        <form method="post" action="@Url.Action("AddProject","Admin")">
+                            <div class="form-row">
+                                <input name="projectName" class="form-input" placeholder="Project name" required />
+                                <select name="clientId" class="form-input" required>
+
+                                    <option value="">Select Client</option>
+
+                                    @foreach (var c in clients)
+                                    {
+                                        <option value="@c.ClientId">
+                                            @c.ClientName
+                                        </option>
+                                    }
+
+                                </select>
+                            </div>
+                            <button class="save-btn" type="submit">Save Project</button>
+                        </form>
+                    </div>
+
+                    <div class="card-grid">
+                        @if (projects.Count == 0)
+                        {
+                            <div class="empty-state">No projects added yet.</div>
+                        }
+                        @foreach (var p in projects)
+                        {
+                            var clientName = clients
+                                .FirstOrDefault(c => c.ClientId == p.ClientId)?.ClientName;
+
+                            <div class="card">
+                                <form method="post" action="@Url.Action("DeleteProject","Admin")">
+                                    <input type="hidden" name="id" value="@p.ProjectId" />
+                                    <button class="delete-btn" type="submit">✕</button>
+                                </form>
+
+                                <div class="card-name">@p.ProjectName</div>
+                                <div class="card-sub">@clientName</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- ACTIVITY TYPES -->
+                <div id="tab-activities" class="tab-panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title">Activity Types</div>
+                            <div class="panel-count">@activities.Count type</div>
+                        </div>
+                        <button class="add-btn" onclick="toggleForm('activityForm')">+ Add Type</button>
+                    </div>
+
+                    <div id="activityForm" class="add-form">
+                        <form method="post" action="@Url.Action("AddActivityType","Admin")">
+                            <div class="form-row">
+                                <input name="activityName" class="form-input" placeholder="Activity type name" required />
+                            </div>
+                            <button class="save-btn" type="submit">Save Type</button>
+                        </form>
+                    </div>
+
+                    <div class="card-grid">
+                        @if (activities.Count == 0)
+                        {
+                            <div class="empty-state">No activity types added yet.</div>
+                        }
+                        @foreach (var a in activities)
+                        {
+                            <div class="card">
+                                <form method="post" action="@Url.Action("DeleteActivityType","Admin")">
+                                    <input type="hidden" name="id" value="@a.ActivityTypeId" />
+                                    <button class="delete-btn" type="submit" title="Delete">✕</button>
+                                </form>
+                                <div class="card-name">@a.ActivityName</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    @if (TempData["Error"] != null)
+    {
+        <div id="errorBox" class="error-box">
+            @TempData["Error"]
+        </div>}
+    <script src="~/Scripts/Admin/admin.js"></script>
+    <script>
+        setTimeout(function () {
+            var box = document.getElementById("errorBox");
+            if (box) {
+                box.style.display = "none";
+            }
+        }, 3000); 
+    </script>
+
+    <script type="text/javascript">
+        window.onpageshow = function (event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        };</script>
+
+</body>
+
+</html>

@@ -1,0 +1,152 @@
+﻿@model SampleProject.Models.UserViewModel
+@{ Layout = null; }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            background: linear-gradient(rgba(5,15,40,.55), rgba(5,15,40,.75)), url("/Content/Images/img23.jpg") center/cover no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass {
+            width: 420px;
+            padding: 40px;
+            border-radius: 20px;
+            background: rgba(30,70,140,.15);
+            backdrop-filter: blur(25px);
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 6px;
+            border: none;
+            background: #0f172a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+
+            select option {
+                background: #0f172a;
+                color: white;
+            }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 10px;
+            background: #070f22;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background: #0d1a3a;
+            }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+            .footer a {
+                color: #cfe3ff;
+                text-decoration: none;
+            }
+
+        .error {
+            color: #ff6b6b;
+            font-weight: 600;
+            margin-top: 6px;
+            font-size: 11px;
+            display: block;
+        }
+
+        
+        .field-validation-error {
+            display: block;
+            color: #ff6b6b;
+            font-size: 11px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .field-validation-valid {
+            display: none;
+        }
+
+       
+    </style>
+</head>
+
+<body>
+    <div class="glass">
+        <h2>Create Account</h2>
+
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+        {
+            if (ViewBag.Error != null)
+            {
+                <div class="error">@ViewBag.Error</div>
+            }
+
+            @Html.TextBoxFor(m => m.UserName, new { placeholder = "Username" })
+            @Html.ValidationMessageFor(m => m.UserName)
+
+            @Html.TextBoxFor(m => m.Email, new { type = "email", placeholder = "Email" })
+            @Html.ValidationMessageFor(m => m.Email)
+
+            @Html.PasswordFor(m => m.Password, new { placeholder = "Password" })
+            @Html.ValidationMessageFor(m => m.Password)
+
+            @Html.PasswordFor(m => m.ConfirmPassword, new { placeholder = "Confirm Password" })
+            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+
+            @Html.DropDownListFor(m => m.ManagerId, ViewBag.Managers as SelectList, "Select Manager")
+            @Html.ValidationMessageFor(m => m.ManagerId)
+
+            @Html.DropDownListFor(m => m.DepartmentId,ViewBag.Departments as SelectList,"Select Department")
+
+            @Html.ValidationMessageFor(m => m.DepartmentId)
+
+            <button type="submit">Register</button>
+
+            <div class="footer">
+                Already have an account?
+                <a href="@Url.Action("Login", "Account")">Login</a>
+            </div>
+        }
+    </div>
+
+    <script src="~/Scripts/jquery-3.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+﻿@{ Layout = null; }
+@model List<SampleProject.Models.TaskListModel>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+   
+    <link href="~/Content/Dashboard/dashboard.css?v=99" rel="stylesheet" />
+   
+</head>
+
+<body>
+
+    
+    <div class="header">
+        <h2>Employee Dashboard</h2>
+        <h2>Welcome, <span>@Session["UserName"]</span></h2>
+    </div>
+
+    <div class="container">
+
+      
+        <div class="sidebar">
+            <div>
+
+                <button class="add-task-btn" id="showAddTask">+ Add Task</button>
+
+                <br /><br />
+
+                <div class="calendar-header">
+                    <button id="prevMonth">&#9664;</button>
+                    <h3 id="monthYear"></h3>
+                    <button id="nextMonth">&#9654;</button>
+                </div>
+                <br />
+                <div id="calendar" class="calendar-grid"></div>
+
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="editdetails" onclick="window.location='@Url.Action("EditDetails","Edit")'">Edit Details</button>
+                <button class="logout"
+                        onclick="window.location='@Url.Action("Logout","Account")'">
+                    Logout
+                </button>
+            </div>
+        </div>
+
+       
+        <div class="main">
+
+           
+            <div class="tasks-section">
+
+                <div class="tasks-headers">
+                    <h2>My Tasks</h2>
+                    <div id="totalHoursBox" class="total-hours">
+                        Total Hours: 0 hrs
+                    </div>
+                </div>
+
+                <br />
+
+                
+                <div id="addTaskForm">
+
+                    <select id="clientId" class="form-input"></select>
+
+                    <select id="projectId" class="form-input"></select>
+
+                    <input id="taskTitle"
+                           class="form-input"
+                           placeholder="Task title" />
+
+                    <input id="assignedBy"
+                           class="form-input"
+                           value="@ViewBag.ManagerName"
+                           readonly />
+
+                    <input id="taskDate"
+                           class="form-input"
+                           placeholder="Select date"
+                           readonly />
+
+                    <div id="taskCalendar" class="task-picker"></div>
+
+                    <div class="form-actions">
+                        <button class="save-btn" id="saveTask">Save</button>
+                        <button class="cancel-btn" id="cancelTask">Cancel</button>
+                    </div>
+
+                </div>
+
+                <div id="taskList">
+                    <div class="empty-msg">Loading...</div>
+                </div>
+
+            </div>
+
+            
+            <div class="activities-section">
+
+                <div class="activities-header">
+                    <h2>Activities</h2>
+                    <button class="add-activity-btn"
+                            id="showAddActivity"
+                            style="display:none">
+                        + Add Activity
+                    </button>
+                </div>
+
+               
+                <div id="addActivityForm">
+
+                    <select id="actType" class="form-input"></select>
+
+                    <input id="actTitle"
+                           class="form-input"
+                           placeholder="Activity title" />
+
+                    <textarea id="actDesc"
+                              rows="2"
+                              class="form-input"
+                              placeholder="Description"></textarea>
+
+                    <div style="display:flex; gap:10px;">
+                        <select id="actHour" class="form-input"></select>
+                        <select id="actMinute" class="form-input"></select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="save-btn" id="saveActivity">Save</button>
+                        <button class="cancel-btn" id="cancelActivity">Cancel</button>
+                    </div>
+
+                </div>
+
+                <div id="activityList">
+                    <div class="empty-msg">
+                        Select a task to see activities
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+  
+
+    <script src="~/Scripts/dashboard/helpers.js"></script>
+    <script src="~/Scripts/dashboard/calendar.js"></script>
+    <script src="~/Scripts/dashboard/lookup.js"></script>
+    <script src="~/Scripts/dashboard/tasks.js"></script>
+    <script src="~/Scripts/dashboard/activities.js"></script>
+    <script src="~/Scripts/dashboard/init.js"></script>
+
+   
+    <script type="text/javascript">window.onpageshow = function (event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        };</script>
+
+</body>
+</html>

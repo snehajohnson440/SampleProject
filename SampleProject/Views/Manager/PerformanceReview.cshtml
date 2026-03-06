@@ -1,0 +1,92 @@
+﻿@{ Layout = null; }
+@model List<SampleProject.Models.EmployeeListModel>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Review</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="~/Content/Manager/performancereview.css?v=99" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="header">
+        <div style="display:flex;align-items:center;gap:14px">
+            <h2>Performance Review <span class="header-role">Manager</span></h2>
+        </div>
+        <h2>Welcome, <span>@Session["UserName"]</span></h2>
+    </div>
+
+    <div class="page">
+
+        <div class="left-panel">
+            <div class="left-inner">
+                <h2>Team Review</h2>
+                <p class="left-sub">Select an employee to review their performance</p>
+
+                <select class="emp-select" id="empDropdown">
+                    <option value="">-- Select Employee --</option>
+                    @foreach (var emp in Model)
+                    {
+                        <option value="@emp.UserId" data-name="@emp.UserName">@emp.UserName</option>
+                    }
+                </select>
+                <div class="section-title">Department Performance</div>
+
+                <div id="departmentPerformance" class="review-history">
+                    <div class="empty-msg">Loading department performance...</div>
+                </div>
+                <br />
+                <div id="empSummary">
+                    <div class="section-title">Performance</div>
+                    <div class="summary-cards">
+                        <div class="summary-card"><div class="val" id="sumTasks">0</div><div class="lbl">Tasks</div></div>
+                        <div class="summary-card"><div class="val" id="sumHours">0</div><div class="lbl">Hours</div></div>
+                        <div class="summary-card"><div class="val" id="sumActivities">0</div><div class="lbl">Activities</div></div>
+                    </div>
+                    <div id="empTaskList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="right-inner disabled" id="rightInner">
+                <div class="select-prompt" id="selectPrompt">&#8592; Select an employee to begin rating</div>
+
+                <div id="ratingArea" style="display:none">
+                    <div class="section-title">Rate Performance — <span id="selectedEmpName" style="color:#58a6ff"></span></div>
+                    <div id="sliders"></div>
+                    <div class="avg-box">
+                        <div class="avg-num" id="avgDisplay">5.0</div>
+                        <div class="avg-lbl">Average Score / 10</div>
+                        <div class="avg-grade" id="avgGrade">Good</div>
+                    </div>
+                    <hr class="divider" />
+                    <div class="section-title">Previous Reviews</div>
+                    <div id="reviewHistory" class="review-history">
+                        <div class="empty-msg">No previous reviews</div>
+                    </div>
+                    <hr class="divider" />
+                    
+                    <textarea id="feedbackText" rows="3"
+                              placeholder="Write your feedback here..."></textarea>
+                    <div class="review-actions">
+                        <button class="reset-btn" id="resetBtn">Reset</button>
+                        <button class="submit-btn" id="submitReview">Submit Review</button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+
+    <script src="~/Scripts/manager/performance-review.js"></script>
+
+</body>
+</html>
+
